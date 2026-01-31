@@ -4,3 +4,4 @@ sqlalchemy
 sentence-transformers 
 qdrant-client 
 numpy
+psycopg[binary]

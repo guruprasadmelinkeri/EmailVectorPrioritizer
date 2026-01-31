@@ -3,7 +3,7 @@ from .classifier import is_high_priority
 from .indexer import index_priority_emails
 from .migrate_priority_email import migrate_priority_emails_from_feedback
 from pydantic import BaseModel
-
+import os 
 app = FastAPI()
 
 class EmailIn(BaseModel):
@@ -31,3 +31,13 @@ def train_priority_classifier():
         "new_samples_added": inserted,
         "indexed": True
     }
+
+import os
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "app.main:app",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000))
+    )

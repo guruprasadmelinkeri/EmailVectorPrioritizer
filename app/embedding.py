@@ -1,8 +1,16 @@
 import re
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
+_model = None
+
+def get_embedding_model():
+    global _model
+    if _model is None:
+        from sentence_transformers import SentenceTransformer
+        _model = SentenceTransformer(
+            "sentence-transformers/paraphrase-MiniLM-L3-v2"
+        )
+    return _model
 
 def scrub_text(text: str) -> str:
     text = text.lower()
@@ -13,6 +21,7 @@ def scrub_text(text: str) -> str:
     return text.strip()
 
 def secure_embed(text: str):
+    model = get_embedding_model()
     emb = model.encode(text)
     emb = emb / np.linalg.norm(emb)
     noise = np.random.normal(0, 0.01, emb.shape)
